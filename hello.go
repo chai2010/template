@@ -8,6 +8,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/chai2010/template"
 )
@@ -22,6 +23,15 @@ func main() {
 		template.MustRender(`Hello, {{.Name}}`, struct{ Name string }{
 			Name: "chai2010",
 		}),
+	)
+
+	fmt.Println(
+		template.MustRender(
+			`Hello, {{upper .Name}}`, struct{ Name string }{Name: "chai2010"},
+			map[string]interface{}{
+				"upper": strings.ToUpper,
+			},
+		),
 	)
 
 	fmt.Println(
@@ -47,5 +57,6 @@ func main() {
 	// Output:
 	// Hello, Neo
 	// Hello, chai2010
+	// Hello, CHAI2010
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
 }

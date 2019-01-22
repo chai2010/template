@@ -11,15 +11,17 @@ import (
 )
 
 func Render(tmpl string, data interface{}, funcMap ...template.FuncMap) (string, error) {
-	t, err := template.New("").Parse(tmpl)
-	if err != nil {
-		return "", err
-	}
+	t := template.New("")
 
 	for _, fnMap := range funcMap {
 		if len(fnMap) > 0 {
 			t = t.Funcs(fnMap)
 		}
+	}
+
+	t, err := t.Parse(tmpl)
+	if err != nil {
+		return "", err
 	}
 
 	var buf bytes.Buffer

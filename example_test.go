@@ -6,6 +6,7 @@ package template_test
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/chai2010/template"
 )
@@ -20,6 +21,15 @@ func Example() {
 		template.MustRender(`Hello, {{.Name}}`, struct{ Name string }{
 			Name: "chai2010",
 		}),
+	)
+
+	fmt.Println(
+		template.MustRender(
+			`Hello, {{upper .Name}}`, struct{ Name string }{Name: "chai2010"},
+			map[string]interface{}{
+				"upper": strings.ToUpper,
+			},
+		),
 	)
 
 	fmt.Println(
@@ -45,5 +55,6 @@ func Example() {
 	// Output:
 	// Hello, Neo
 	// Hello, chai2010
+	// Hello, CHAI2010
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
 }
