@@ -41,11 +41,11 @@ func Example() {
 					Book: "《Go语言高级编程》",
 				},
 				{
-					Name: "chai2010",
+					Name: "chai2010 & ending",
 					Book: "《WebAssembly标准入门》",
 				},
 				{
-					Name: "ending",
+					Name: "ending & chai2010",
 					Book: "《C/C++面向WebAssembly编程》",
 				},
 			},
