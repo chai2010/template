@@ -29,9 +29,30 @@ func main() {
 		}),
 	)
 
+	fmt.Println(
+		template.MustRender(
+			`{{range $i, $v := .}}{{$v.Book}}{{end}}`,
+			[]struct{ Name, Book string }{
+				{
+					Name: "chai2010",
+					Book: "《Go语言高级编程》",
+				},
+				{
+					Name: "chai2010",
+					Book: "《WebAssembly标准入门》",
+				},
+				{
+					Name: "ending",
+					Book: "《C/C++面向WebAssembly编程》",
+				},
+			},
+		),
+	)
+
 	// Output:
 	// Hello, Neo
 	// Hello, chai2010
+	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
 }
 ```
 
