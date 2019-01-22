@@ -18,7 +18,13 @@ func main() {
 			"Name": "Neo",
 		}),
 	)
+	fmt.Println(
+		template.MustRender(`Hello, {{.Name}}`, struct{Name string}{
+			Name: "chai2010",
+		}),
+	)
 
 	// Output:
 	// Hello, Neo
+	// Hello, chai2010
 }
