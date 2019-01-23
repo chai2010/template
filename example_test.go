@@ -13,13 +13,25 @@ import (
 
 func Example() {
 	fmt.Println(
+		template.MustRender(`Hello, {{.}}`, "Neo"),
+	)
+	fmt.Println(
+		template.MustRender(`Hello, {{index . 0}}`, []string{"Go"}),
+	)
+	fmt.Println(
+		template.MustRender(`Hello, {{index . "Name"}}`,
+			map[string]string{"Name": "凹(Wa)"},
+		),
+	)
+
+	fmt.Println(
 		template.MustRender(`Hello, {{.Name}}`, map[string]string{
-			"Name": "Neo",
+			"Name": "Lua",
 		}),
 	)
 	fmt.Println(
 		template.MustRender(`Hello, {{.Name}}`, struct{ Name string }{
-			Name: "chai2010",
+			Name: "Ruby",
 		}),
 	)
 
@@ -43,7 +55,10 @@ func Example() {
 
 	// Output:
 	// Hello, Neo
-	// Hello, chai2010
+	// Hello, Go
+	// Hello, 凹(Wa)
+	// Hello, Lua
+	// Hello, Ruby
 	// Hello, CHAI2010
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
 }
