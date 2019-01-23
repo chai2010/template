@@ -81,6 +81,10 @@ func main() {
 		),
 	)
 
+	fmt.Println(
+		template.MustRenderFile("hello.tmpl", map[string]string{"Name": "World"}),
+	)
+
 	// Output:
 	// Hello, Neo
 	// Hello, Go
@@ -92,4 +96,5 @@ func main() {
 	// Hello, {{Neo}}
 	// Self: true-9527-C-Value, if A == true
 	// slice: 0:A 1:B 2:C
+	// Hello, World
 }
