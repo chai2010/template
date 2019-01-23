@@ -68,6 +68,19 @@ func Example() {
 		),
 	)
 
+	fmt.Println(
+		template.MustRender(
+			`slice: {{range $i, $v := slice}}{{$i}}:{{$v}} {{end}}`,
+			"Self", template.FuncMap{
+				"slice": func() []string {
+					return []string{
+						"A", "B", "C",
+					}
+				},
+			},
+		),
+	)
+
 	// Output:
 	// Hello, Neo
 	// Hello, Go
@@ -78,4 +91,5 @@ func Example() {
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
 	// Hello, {{Neo}}
 	// Self: true-9527-C-Value, if A == true
+	// slice: 0:A 1:B 2:C
 }
