@@ -63,6 +63,16 @@ func main() {
 		template.MustRenderWithDelims(`Hello, {{<<.))}}`, `<<`, `))`, "Neo"),
 	)
 
+	fmt.Println(
+		template.MustRender(`Hello, {{A}}-{{B}}-{{C}}`, "",
+			template.FuncMap{
+				"A": func() bool { return true },
+				"B": func() int { return 9527 },
+				"C": func() string { return "C-Value" },
+			},
+		),
+	)
+
 	// Output:
 	// Hello, Neo
 	// Hello, Go
@@ -72,6 +82,7 @@ func main() {
 	// Hello, CHAI2010
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
 	// Hello, {{Neo}}
+	// Hello, true-9527-C-Value
 }
 ```
 
