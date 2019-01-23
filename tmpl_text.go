@@ -34,12 +34,42 @@ func Render(tmpl string, data interface{}, funcMap ...FuncMap) (string, error) {
 	return buf.String(), nil
 }
 
+func RenderWithDelims(tmpl, left, right string, data interface{}, funcMap ...FuncMap) (string, error) {
+	t := template.New("").Delims(left, right)
+
+	for _, fnMap := range funcMap {
+		if len(fnMap) > 0 {
+			t = t.Funcs(fnMap)
+		}
+	}
+
+	t, err := t.Parse(tmpl)
+	if err != nil {
+		return "", err
+	}
+
+	var buf bytes.Buffer
+	if err = t.Execute(&buf, data); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
+}
+
 func RenderFile(filename string, data interface{}, funcMap ...FuncMap) (string, error) {
 	s, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}
 	return Render(string(s), data, funcMap...)
+}
+
+func RenderFileWithDelims(filename, left, right string, data interface{}, funcMap ...FuncMap) (string, error) {
+	s, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	return RenderWithDelims(string(s), left, right, data, funcMap...)
 }
 
 func MustRender(tmpl string, data interface{}, funcMap ...FuncMap) string {
@@ -50,8 +80,24 @@ func MustRender(tmpl string, data interface{}, funcMap ...FuncMap) string {
 	return s
 }
 
+func MustRenderWithDelims(tmpl, left, right string, data interface{}, funcMap ...FuncMap) string {
+	s, err := RenderWithDelims(tmpl, left, right, data, funcMap...)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
 func MustRenderFile(filename string, data interface{}, funcMap ...FuncMap) string {
 	s, err := RenderFile(filename, data, funcMap...)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+func MustRenderFileWithDelims(filename, left, right string, data interface{}, funcMap ...FuncMap) string {
+	s, err := RenderFileWithDelims(filename, left, right, data, funcMap...)
 	if err != nil {
 		panic(err)
 	}

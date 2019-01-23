@@ -59,6 +59,10 @@ func main() {
 		),
 	)
 
+	fmt.Println(
+		template.MustRenderWithDelims(`Hello, {{<<.))}}`, `<<`, `))`, "Neo"),
+	)
+
 	// Output:
 	// Hello, Neo
 	// Hello, Go
@@ -67,6 +71,7 @@ func main() {
 	// Hello, Ruby
 	// Hello, CHAI2010
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
+	// Hello, {{Neo}}
 }
 ```
 

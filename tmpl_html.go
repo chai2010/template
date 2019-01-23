@@ -34,12 +34,42 @@ func RenderHTML(tmpl string, data interface{}, funcMap ...HTMLFuncMap) (string, 
 	return buf.String(), nil
 }
 
+func RenderHTMLWithDelims(tmpl, left, right string, data interface{}, funcMap ...HTMLFuncMap) (string, error) {
+	t := template.New("").Delims(left, right)
+
+	for _, fnMap := range funcMap {
+		if len(fnMap) > 0 {
+			t = t.Funcs(fnMap)
+		}
+	}
+
+	t, err := t.Parse(tmpl)
+	if err != nil {
+		return "", err
+	}
+
+	var buf bytes.Buffer
+	if err = t.Execute(&buf, data); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
+}
+
 func RenderHTMLFile(filename string, data interface{}, funcMap ...HTMLFuncMap) (string, error) {
 	s, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return "", err
 	}
 	return RenderHTML(string(s), data, funcMap...)
+}
+
+func RenderHTMLFileWithDelims(filename, left, right string, data interface{}, funcMap ...HTMLFuncMap) (string, error) {
+	s, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+	return RenderHTMLWithDelims(string(s), left, right, data, funcMap...)
 }
 
 func MustRenderHTML(tmpl string, data interface{}, funcMap ...HTMLFuncMap) string {
@@ -50,8 +80,24 @@ func MustRenderHTML(tmpl string, data interface{}, funcMap ...HTMLFuncMap) strin
 	return s
 }
 
+func MustRenderHTMLWithDelims(tmpl, left, right string, data interface{}, funcMap ...HTMLFuncMap) string {
+	s, err := RenderHTMLWithDelims(tmpl, left, right, data, funcMap...)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
 func MustRenderHTMLFile(filename string, data interface{}, funcMap ...HTMLFuncMap) string {
 	s, err := RenderHTMLFile(filename, data, funcMap...)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+func MustRenderHTMLFileWithDelims(filename, left, right string, data interface{}, funcMap ...HTMLFuncMap) string {
+	s, err := RenderHTMLFileWithDelims(filename, left, right, data, funcMap...)
 	if err != nil {
 		panic(err)
 	}
