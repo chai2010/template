@@ -70,12 +70,10 @@ func Example() {
 
 	fmt.Println(
 		template.MustRender(
-			`slice: {{range $i, $v := slice}}{{$i}}:{{$v}} {{end}}`,
-			"Self", template.FuncMap{
+			`slice: {{range $i, $v := slice}}{{$i}}:{{$v}} {{end}}`, nil,
+			template.FuncMap{
 				"slice": func() []string {
-					return []string{
-						"A", "B", "C",
-					}
+					return []string{"A", "B", "C"}
 				},
 			},
 		),
