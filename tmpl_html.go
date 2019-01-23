@@ -10,7 +10,9 @@ import (
 	"io/ioutil"
 )
 
-func RenderHTML(tmpl string, data interface{}, funcMap ...template.FuncMap) (string, error) {
+type HTMLFuncMap = template.FuncMap
+
+func RenderHTML(tmpl string, data interface{}, funcMap ...HTMLFuncMap) (string, error) {
 	t := template.New("")
 
 	for _, fnMap := range funcMap {
@@ -32,7 +34,7 @@ func RenderHTML(tmpl string, data interface{}, funcMap ...template.FuncMap) (str
 	return buf.String(), nil
 }
 
-func RenderHTMLFile(filename string, data interface{}, funcMap ...template.FuncMap) (string, error) {
+func RenderHTMLFile(filename string, data interface{}, funcMap ...HTMLFuncMap) (string, error) {
 	s, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return "", err
@@ -40,7 +42,7 @@ func RenderHTMLFile(filename string, data interface{}, funcMap ...template.FuncM
 	return RenderHTML(string(s), data, funcMap...)
 }
 
-func MustRenderHTML(tmpl string, data interface{}, funcMap ...template.FuncMap) string {
+func MustRenderHTML(tmpl string, data interface{}, funcMap ...HTMLFuncMap) string {
 	s, err := RenderHTML(tmpl, data, funcMap...)
 	if err != nil {
 		panic(err)
@@ -48,7 +50,7 @@ func MustRenderHTML(tmpl string, data interface{}, funcMap ...template.FuncMap) 
 	return s
 }
 
-func MustRenderHTMLFile(filename string, data interface{}, funcMap ...template.FuncMap) string {
+func MustRenderHTMLFile(filename string, data interface{}, funcMap ...HTMLFuncMap) string {
 	s, err := RenderHTMLFile(filename, data, funcMap...)
 	if err != nil {
 		panic(err)

@@ -10,7 +10,9 @@ import (
 	"text/template"
 )
 
-func Render(tmpl string, data interface{}, funcMap ...template.FuncMap) (string, error) {
+type FuncMap = template.FuncMap
+
+func Render(tmpl string, data interface{}, funcMap ...FuncMap) (string, error) {
 	t := template.New("")
 
 	for _, fnMap := range funcMap {
@@ -32,7 +34,7 @@ func Render(tmpl string, data interface{}, funcMap ...template.FuncMap) (string,
 	return buf.String(), nil
 }
 
-func RenderFile(filename string, data interface{}, funcMap ...template.FuncMap) (string, error) {
+func RenderFile(filename string, data interface{}, funcMap ...FuncMap) (string, error) {
 	s, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return "", err
@@ -40,7 +42,7 @@ func RenderFile(filename string, data interface{}, funcMap ...template.FuncMap) 
 	return Render(string(s), data, funcMap...)
 }
 
-func MustRender(tmpl string, data interface{}, funcMap ...template.FuncMap) string {
+func MustRender(tmpl string, data interface{}, funcMap ...FuncMap) string {
 	s, err := Render(tmpl, data, funcMap...)
 	if err != nil {
 		panic(err)
@@ -48,7 +50,7 @@ func MustRender(tmpl string, data interface{}, funcMap ...template.FuncMap) stri
 	return s
 }
 
-func MustRenderFile(filename string, data interface{}, funcMap ...template.FuncMap) string {
+func MustRenderFile(filename string, data interface{}, funcMap ...FuncMap) string {
 	s, err := RenderFile(filename, data, funcMap...)
 	if err != nil {
 		panic(err)

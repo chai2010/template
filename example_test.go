@@ -26,9 +26,7 @@ func Example() {
 	fmt.Println(
 		template.MustRender(
 			`Hello, {{upper .Name}}`, struct{ Name string }{Name: "chai2010"},
-			map[string]interface{}{
-				"upper": strings.ToUpper,
-			},
+			template.FuncMap{"upper": strings.ToUpper},
 		),
 	)
 
@@ -36,18 +34,9 @@ func Example() {
 		template.MustRender(
 			`{{range $i, $v := .}}{{$v.Book}}{{end}}`,
 			[]struct{ Name, Book string }{
-				{
-					Name: "chai2010",
-					Book: "《Go语言高级编程》",
-				},
-				{
-					Name: "chai2010 & ending",
-					Book: "《WebAssembly标准入门》",
-				},
-				{
-					Name: "ending & chai2010",
-					Book: "《C/C++面向WebAssembly编程》",
-				},
+				{Name: "chai2010", Book: "《Go语言高级编程》"},
+				{Name: "chai2010 & ending", Book: "《WebAssembly标准入门》"},
+				{Name: "ending & chai2010", Book: "《C/C++面向WebAssembly编程》"},
 			},
 		),
 	)
