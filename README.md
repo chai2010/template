@@ -60,6 +60,12 @@ func main() {
 	)
 
 	fmt.Println(
+		template.MustRender(
+			`{{range .}}<{{.}}>{{end}}`, []string{"hello", "world"},
+		),
+	)
+
+	fmt.Println(
 		template.MustRenderWithDelims(`Hello, {{<<.))}}`, `<<`, `))`, "Neo"),
 	)
 
@@ -97,6 +103,7 @@ func main() {
 	// Hello, Ruby
 	// Hello, CHAI2010
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
+	// <hello><world>
 	// Hello, {{Neo}}
 	// Self: true-9527-C-Value, if A == true
 	// slice: 0:A 1:B 2:C

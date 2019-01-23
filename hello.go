@@ -56,6 +56,12 @@ func main() {
 	)
 
 	fmt.Println(
+		template.MustRender(
+			`{{range .}}<{{.}}>{{end}}`, []string{"hello", "world"},
+		),
+	)
+
+	fmt.Println(
 		template.MustRenderWithDelims(`Hello, {{<<.))}}`, `<<`, `))`, "Neo"),
 	)
 
