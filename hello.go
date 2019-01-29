@@ -21,8 +21,12 @@ func main() {
 		template.MustRender(`Hello, {{index . 0}}`, []string{"Go"}),
 	)
 	fmt.Println(
-		template.MustRender(`Hello, {{index . "Name"}}`,
-			map[string]string{"Name": "凹(Wa)"},
+		template.MustRender(`Hello, {{index . "Name" "SubName"}}`,
+			map[string]interface{}{
+				"Name": map[string]string {
+					"SubName": "凹(Wa)",
+				},
+			},
 		),
 	)
 
