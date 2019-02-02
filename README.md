@@ -13,6 +13,8 @@ package main
 
 import (
 	"fmt"
+	"image"
+	"strings"
 
 	"github.com/chai2010/template"
 )
@@ -47,8 +49,22 @@ func main() {
 
 	fmt.Println(
 		template.MustRender(
-			`Hello, {{upper .Name}}`, struct{ Name string }{Name: "chai2010"},
-			template.FuncMap{"upper": strings.ToUpper},
+			`Hello, {{upper .Name}}, Age: {{Age}}; Point: {{Point.X}}, {{Map.Name.SubName}}`,
+			struct{ Name string }{
+				Name: "chai2010",
+			},
+			template.FuncMap{
+				"upper": strings.ToUpper,
+				"Age":   func() int { return 20 },
+				"Point": func() image.Point { return image.Pt(123, 456) },
+				"Map": func() map[string]interface{} {
+					return map[string]interface{}{
+						"Name": struct{ SubName string }{
+							SubName: "chai2010",
+						},
+					}
+				},
+			},
 		),
 	)
 
@@ -105,7 +121,7 @@ func main() {
 	// Hello, 凹(Wa)
 	// Hello, Lua
 	// Hello, Ruby
-	// Hello, CHAI2010
+	// Hello, CHAI2010, Age: 20; Point: 123, chai2010
 	// 《Go语言高级编程》《WebAssembly标准入门》《C/C++面向WebAssembly编程》
 	// <hello><world>
 	// Hello, {{Neo}}
