@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"html/template"
 	"io/ioutil"
+	"reflect"
 )
 
 type HTMLFuncMap = template.FuncMap
@@ -32,6 +33,22 @@ func RenderHTML(tmpl string, data interface{}, funcMap ...HTMLFuncMap) (string, 
 	}
 
 	return buf.String(), nil
+}
+
+func RenderHTMLMap(tmpl string, m map[string]interface{}) (string, error) {
+	var (
+		dataMap = make(map[string]interface{})
+		fnMap   = make(HTMLFuncMap)
+	)
+	for k, v := range m {
+		if reflect.TypeOf(v).Kind() != reflect.Func {
+			dataMap[k] = v
+		} else {
+			fnMap[k] = v
+		}
+	}
+
+	return RenderHTML(tmpl, dataMap, fnMap)
 }
 
 func RenderHTMLWithDelims(tmpl, left, right string, data interface{}, funcMap ...HTMLFuncMap) (string, error) {
@@ -74,6 +91,14 @@ func RenderHTMLFileWithDelims(filename, left, right string, data interface{}, fu
 
 func MustRenderHTML(tmpl string, data interface{}, funcMap ...HTMLFuncMap) string {
 	s, err := RenderHTML(tmpl, data, funcMap...)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+func MustRenderHTMLMap(tmpl string, m map[string]interface{}) string {
+	s, err := RenderHTMLMap(tmpl, m)
 	if err != nil {
 		panic(err)
 	}

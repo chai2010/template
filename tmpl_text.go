@@ -7,6 +7,7 @@ package template
 import (
 	"bytes"
 	"io/ioutil"
+	"reflect"
 	"text/template"
 )
 
@@ -32,6 +33,22 @@ func Render(tmpl string, data interface{}, funcMap ...FuncMap) (string, error) {
 	}
 
 	return buf.String(), nil
+}
+
+func RenderMap(tmpl string, m map[string]interface{}) (string, error) {
+	var (
+		dataMap = make(map[string]interface{})
+		fnMap   = make(FuncMap)
+	)
+	for k, v := range m {
+		if reflect.TypeOf(v).Kind() != reflect.Func {
+			dataMap[k] = v
+		} else {
+			fnMap[k] = v
+		}
+	}
+
+	return Render(tmpl, dataMap, fnMap)
 }
 
 func RenderWithDelims(tmpl, left, right string, data interface{}, funcMap ...FuncMap) (string, error) {
@@ -74,6 +91,14 @@ func RenderFileWithDelims(filename, left, right string, data interface{}, funcMa
 
 func MustRender(tmpl string, data interface{}, funcMap ...FuncMap) string {
 	s, err := Render(tmpl, data, funcMap...)
+	if err != nil {
+		panic(err)
+	}
+	return s
+}
+
+func MustRenderMap(tmpl string, m map[string]interface{}) string {
+	s, err := RenderMap(tmpl, m)
 	if err != nil {
 		panic(err)
 	}

@@ -107,6 +107,13 @@ func main() {
 	)
 
 	fmt.Println(
+		template.MustRenderMap("{{.Say}}, {{Year}}", map[string]interface{}{
+			"Say":  "Hello",
+			"Year": func() interface{} { return 2019 },
+		}),
+	)
+
+	fmt.Println(
 		template.MustRenderFile("hello.tmpl", map[string]string{"Name": "World"}),
 	)
 
